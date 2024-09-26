@@ -128,8 +128,8 @@ $controlador->manejarPeticionesControlador();
                 <!-- Botones del dashboard -->
                 <div class="row">
                     <div class="col-md-4 mb-4">
-                        <a href="form_iva.php" class="btn btn-dashboard">
-                            Planillas
+                        <a href="app/views/content/Compras.php" class="btn btn-dashboard">
+                            Compras
                         </a>
                     </div>
                     <div class="col-md-4 mb-4">
