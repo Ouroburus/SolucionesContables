@@ -51,7 +51,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="form_iva.php">
-                                <i class="fas fa-file-invoice-dollar"></i> Formulario Planillas
+                                <i class="fas fa-file-invoice-dollar"></i>  Compras
                             </a>
                         </li>
                         <li class="nav-item">

@@ -1,17 +1,5 @@
 {
-    "name": "solucionescontables/vendor",
-    "description": "proyecto php",
-    "type": "library",
-    "autoload": {
-        "psr-4": {
-            "Solucionescontables\\Vendor\\": "app/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Ouroburus",
-            "email": "henryalonzo16@gmail.com"
-        }
-    ],
-    "require": {}
+    "require": {
+        "mongodb/mongodb": "^1.20"
+    }
 }

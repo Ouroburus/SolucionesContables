@@ -6,5 +6,8 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Solucionescontables\\Vendor\\' => array($baseDir . '/app'),
+    'Symfony\\Polyfill\\Php81\\' => array($vendorDir . '/symfony/polyfill-php81'),
+    'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),
+    'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
+    'MongoDB\\' => array($vendorDir . '/mongodb/mongodb/src'),
 );

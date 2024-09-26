@@ -1,3 +1,7 @@
+<?php
+require "../../controllers/save_data.php";
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,50 +14,60 @@
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
         }
+        .menu-lateral {
+            background-color: #ffffff; /* Color de fondo para el menú lateral */
+            border-right: 0px solid #dee2e6; /* Borde derecho */
+        }
+        .contenido {
+            padding: 10px; /* Espacio interior */
+        }
     </style>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
     <h1 class="mt-5">Libro de Compras</h1>
-    <?php include "../layouts/MenuLateral.php"; ?>
-    
-    <div class="">
-        <table class="table table-bordered mt-4" id="libroComprasTable">
-            <thead>
-                <tr>
-                    <th>N°</th>
-                    <th>Emisión</th>
-                    <th>Número Documento</th>
-                    <th>NIT o DUI</th>
-                    <th>NRC</th>
-                    <th>Nombre del Proveedor</th>
-                    <th>Compras Exentas</th>
-                    <th>Compras Gravadas</th>
-                    <th>Crédito Fiscal</th>
-                    <th>IVA Percibido</th>
-                    <th>Total Compras</th>
-                    <th>Compras a Sujetos Excluidos</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td><input type="date" class="form-control"></td>
-                    <td><input type="text" class="form-control"></td>
-                    <td><input type="text" class="form-control"></td>
-                    <td><input type="text" class="form-control"></td>
-                    <td><input type="text" class="form-control"></td>
-                    <td><input type="text" class="form-control"></td>
-                    <td><input type="text" class="form-control"></td>
-                    <td><input type="text" class="form-control"></td>
-                    <td><input type="text" class="form-control"></td>
-                    <td><input type="text" class="form-control"></td>
-                    <td><input type="text" class="form-control"></td>
-                </tr>
-            </tbody>
-        </table>
-        <button class="btn btn-primary" id="addRowBtn">Agregar Fila</button>
-        <button class="btn btn-success" id="saveDataBtn">Guardar Datos</button>
+    <div class="row">
+        <div class="col-md-3 menu-lateral">
+            <?php include "../layouts/MenuLateral.php"; ?>
+        </div>
+        <div class="col-md-9 contenido">
+            <table class="table table-bordered mt-4" id="libroComprasTable">
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Emisión</th>
+                        <th>Número Documento</th>
+                        <th>NIT o DUI</th>
+                        <th>NRC</th>
+                        <th>Nombre del Proveedor</th>
+                        <th>Compras Exentas</th>
+                        <th>Compras Gravadas</th>
+                        <th>Crédito Fiscal</th>
+                        <th>IVA Percibido</th>
+                        <th>Total Compras</th>
+                        <th>Compras a Sujetos Excluidos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><input type="date" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-primary" id="addRowBtn">Agregar Fila</button>
+            <button class="btn btn-success" id="saveDataBtn">Guardar Datos</button>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -106,7 +120,7 @@
 
                 // Enviar los datos al servidor
                 $.ajax({
-                    url: 'save_data.php',  // Archivo PHP que procesará los datos
+                    url: '../../controllers/save_data.php',
                     method: 'POST',
                     data: { rows: rows },
                     success: function(response) {

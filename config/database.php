@@ -1,33 +1,26 @@
 <?php
-require 'vendor/autoload.php'; 
+// Archivo de configuración para conectar a MongoDB
 
+// Clase para manejar la conexión a MongoDB
 class MongoDBConnection {
     private $client;
     private $db;
 
-    public function __construct($db_name = 'DBContador') {
-        try {
-            // Estableciendo la conexión
-            $this->client = new MongoDB\Client("mongodb://localhost:27017");
-            // Selecciona la base de datos de forma segura
-            $this->db = $this->client->selectDatabase($db_name);
-        } catch (Exception $e) {
-            // Manejo de errores
-            echo "Error al conectar con MongoDB: " . $e->getMessage();
-            exit();
-        }
+    public function __construct() {
+        // Configura la URL de conexión a MongoDB (ajusta según sea necesario)
+        $this->client = new MongoDB\Client("mongodb://localhost:27017");
+
+        // Selecciona la base de datos (ajusta el nombre a tu base de datos real)
+        $this->db = $this->client->BDContador;
     }
 
-    // Obtener una colección de la base de datos
-    public function getCollection($collection_name) {
-        try {
-            return $this->db->selectCollection($collection_name);
-        } catch (Exception $e) {
-            // Manejo de errores
-            echo "Error al obtener la colección: " . $e->getMessage();
-            return null;
-        }
+    // Método para obtener una colección
+    public function getCollection($LibroCompras) {
+        return $this->db->$LibroCompras;
+        
     }
+
+
+     
+
 }
-
-

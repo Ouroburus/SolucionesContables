@@ -13,6 +13,9 @@ $controlador->manejarPeticionesControlador();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Soluciones Contables - Dashboard</title>
+
+
+
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -60,6 +63,9 @@ $controlador->manejarPeticionesControlador();
     </style>
 </head>
 <body>
+
+
+
     <!-- Header -->
     <header class="navbar navbar-dark header">
         <div class="container-fluid">
@@ -133,13 +139,13 @@ $controlador->manejarPeticionesControlador();
                         </a>
                     </div>
                     <div class="col-md-4 mb-4">
-                        <a href="form_patente.php" class="btn btn-dashboard">
-                            Formulario Patente
+                        <a href="app/views/content/LibroContribuyente.php" class="btn btn-dashboard">
+                            Libro Ventas Contribuyente 
                         </a>
                     </div>
                     <div class="col-md-4 mb-4">
-                        <a href="partidas_diario.php" class="btn btn-dashboard">
-                            Partidas de Diario
+                        <a href="app/views/content/ventasconsumidor.php" class="btn btn-dashboard">
+                            Ventas Consumidor Final
                         </a>
                     </div>
                     <div class="col-md-4 mb-4">

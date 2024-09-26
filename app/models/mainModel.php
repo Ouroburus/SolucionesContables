@@ -1,10 +1,9 @@
 <?php
 
 namespace app\models;
-use \PDO;
 
-if(file_exists(__DIR__."/../../config/server.php")){
-    require_once __DIR__."/../../config/server.php";
+if(file_exists(__DIR__."/../../config/database.php")){
+    require_once __DIR__."/../../config/database.php";
 }
 
 class mainModel {
