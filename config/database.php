@@ -1,26 +1,18 @@
 <?php
-// config/database.php
+require 'vendor/autoload.php'; // Asegúrate de instalar el paquete de MongoDB
 
-class Database {
-    private $host = 'localhost';
-    private $db_name = 'soluciones_contables';
-    private $username = 'root';
-    private $password = '';
-    public $conn;
+class MongoDBConnection {
+    private $client;
+    private $db;
 
-    public function getConnection(){
-        $this->conn = null;
+    public function __construct($db_name = 'nombre_base_de_datos') {
+        $this->client = new MongoDB\Client("mongodb://localhost:27017");
+        $this->db = $this->client->$db_name;
+    }
 
-        try{
-            $this->conn = new PDO("mysql:host=".$this->host.";dbname=".$this->db_name.";charset=utf8", $this->username, $this->password);
-            // Configurar el modo de error de PDO a excepción
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch(PDOException $exception){
-            echo "Error de conexión: " . $exception->getMessage();
-            exit;
-        }
-
-        return $this->conn;
+    public function getCollection($collection_name) {
+        return $this->db->$collection_name;
     }
 }
 ?>
+

@@ -5,7 +5,7 @@
 	class viewsModel{
 
 		/*---------- Modelo obtener vista ----------*/
-		protected function obtenerVistasModelo($vista){
+		public function obtenerVistasModelo($vista){
 
 			// Lista de vistas permitidas en la aplicación contable
 			$listaBlanca=[

@@ -26,6 +26,7 @@ $controlador->manejarPeticionesControlador();
         .sidebar {
             background-color: #35617e;
             height: 100vh;
+            width: 25vh;
         }
         .sidebar .nav-link {
             color: #f2f2f2;
@@ -36,7 +37,7 @@ $controlador->manejarPeticionesControlador();
         .header {
             background-color: #35617e;
             color: white;
-            padding: 10px 20px;
+            padding: 5px 10px;
         }
         .header .navbar-brand {
             font-size: 1.5rem;

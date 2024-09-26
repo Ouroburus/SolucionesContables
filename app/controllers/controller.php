@@ -2,7 +2,9 @@
 
 namespace app\controllers;
 
-require_once './app/models/viewsModel.php';
+use app\models\viewsModel;
+
+require './app/models/viewsModel.php';
 
 
 class Controller {
@@ -10,12 +12,12 @@ class Controller {
     /*---------- Controlador para obtener vistas ----------*/
     public function obtenerVistaControlador($vista) {
         $modeloVista = new viewsModel();
-        $vistaSolicitada = $modeloVista->obtenerVistasModelo($vista);
-
+        $vistaSolicitada = $modeloVista->obtenerVistasModelo($vista);  // Cambiado a obtenerVistasModelo
+    
         if ($vistaSolicitada == "404") {
             include "./app/views/content/404-vista.php";
         } else {
-            include $vistaSolicitada;
+           // include $vistaSolicitada;
         }
     }
 
@@ -50,3 +52,4 @@ class Controller {
         exit();
     }
 }
+?>
