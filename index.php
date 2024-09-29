@@ -93,22 +93,22 @@ $controlador->manejarPeticionesControlador();
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="form_iva.php">
-                                <i class="fas fa-file-invoice-dollar"></i> Formulario Planillas
+                                <i class="fas fa-file-invoice-dollar"></i>Compras
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="form_patente.php">
-                                <i class="fas fa-building"></i> Formulario Patente
+                                <i class="fas fa-building"></i> Ventas Contribuyente
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="partidas_diario.php">
-                                <i class="fas fa-book"></i> Partidas de Diario
+                                <i class="fas fa-book"></i> Ventas Consumidor Final
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="balances_diarios.php">
-                                <i class="fas fa-balance-scale"></i> Balances Diarios
+                                <i class="fas fa-balance-scale"></i>Planillas
                             </a>
                         </li>
                         <li class="nav-item">
@@ -140,7 +140,7 @@ $controlador->manejarPeticionesControlador();
                     </div>
                     <div class="col-md-4 mb-4">
                         <a href="app/views/content/LibroContribuyente.php" class="btn btn-dashboard">
-                            Libro Ventas Contribuyente 
+                             Ventas Contribuyente 
                         </a>
                     </div>
                     <div class="col-md-4 mb-4">
@@ -150,7 +150,7 @@ $controlador->manejarPeticionesControlador();
                     </div>
                     <div class="col-md-4 mb-4">
                         <a href="balances_diarios.php" class="btn btn-dashboard">
-                            Balances Diarios
+                            Planillas
                         </a>
                     </div>
                     <div class="col-md-4 mb-4">

@@ -24,15 +24,15 @@
     <table>
         <tr>
             <td>Nombre del Contribuyente:</td>
-            <td><input type="text" name="nombre_contribuyente"></td>
+            <td><input type="text" name="nombre_contribuyente" required></td>
             <td>NRC:</td>
-            <td><input type="text" name="nrc"></td>
+            <td><input type="text" name="nrc" required></td>
         </tr>
         <tr>
             <td>Mes:</td>
-            <td><input type="text" name="mes"></td>
+            <td><input type="text" name="mes" required></td>
             <td>Año:</td>
-            <td><input type="text" name="anio" value="2024"></td>
+            <td><input type="text" name="anio" value="2024" required></td>
         </tr>
     </table>
 
@@ -52,24 +52,11 @@
                 <th>A Cuenta de Terceros Gravadas</th>
                 <th>Total</th>
                 <th>IVA Retenido</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody id="tabla_ventas">
-            <!-- Aquí se generarán las filas dinámicamente -->
-            <tr>
-                <td>1</td>
-                <td><input type="text" name="dia[]"></td>
-                <td><input type="text" name="correlativo[]"></td>
-                <td><input type="text" name="nombre_cliente[]"></td>
-                <td><input type="text" name="nrc_cliente[]"></td>
-                <td><input type="text" name="propias_exentas[]"></td>
-                <td><input type="text" name="propias_gravadas[]"></td>
-                <td><input type="text" name="debito_fiscal[]"></td>
-                <td><input type="text" name="terceros_exentas[]"></td>
-                <td><input type="text" name="terceros_gravadas[]"></td>
-                <td><input type="text" name="total[]"></td>
-                <td><input type="text" name="iva_retenido[]"></td>
-            </tr>
+            <!-- Filas dinámicas -->
         </tbody>
     </table>
 
@@ -79,25 +66,31 @@
 </form>
 
 <script>
-    function agregarFila() {
-        const tabla = document.getElementById('tabla_ventas');
-        const fila = document.createElement('tr');
-        fila.innerHTML = `
-            <td>${tabla.rows.length + 1}</td>
-            <td><input type="text" name="dia[]"></td>
-            <td><input type="text" name="correlativo[]"></td>
-            <td><input type="text" name="nombre_cliente[]"></td>
-            <td><input type="text" name="nrc_cliente[]"></td>
-            <td><input type="text" name="propias_exentas[]"></td>
-            <td><input type="text" name="propias_gravadas[]"></td>
-            <td><input type="text" name="debito_fiscal[]"></td>
-            <td><input type="text" name="terceros_exentas[]"></td>
-            <td><input type="text" name="terceros_gravadas[]"></td>
-            <td><input type="text" name="total[]"></td>
-            <td><input type="text" name="iva_retenido[]"></td>
-        `;
-        tabla.appendChild(fila);
-    }
+function agregarFila() {
+    const tabla = document.getElementById('tabla_ventas');
+    const fila = document.createElement('tr');
+    fila.innerHTML = `
+        <td>${tabla.rows.length + 1}</td>
+        <td><input type="text" name="dia[]" required></td>
+        <td><input type="text" name="correlativo[]" required></td>
+        <td><input type="text" name="nombre_cliente[]" required></td>
+        <td><input type="text" name="nrc_cliente[]"></td>
+        <td><input type="number" name="propias_exentas[]" step="0.01"></td>
+        <td><input type="number" name="propias_gravadas[]" step="0.01"></td>
+        <td><input type="number" name="debito_fiscal[]" step="0.01"></td>
+        <td><input type="number" name="terceros_exentas[]" step="0.01"></td>
+        <td><input type="number" name="terceros_gravadas[]" step="0.01"></td>
+        <td><input type="number" name="total[]" step="0.01"></td>
+        <td><input type="number" name="iva_retenido[]" step="0.01"></td>
+        <td><button type="button" onclick="eliminarFila(this)">Eliminar</button></td>
+    `;
+    tabla.appendChild(fila);
+}
+
+function eliminarFila(boton) {
+    const fila = boton.parentNode.parentNode; // Obtiene la fila que contiene el botón
+    fila.parentNode.removeChild(fila); // Elimina la fila
+}
 </script>
 
 </body>

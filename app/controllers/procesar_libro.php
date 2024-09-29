@@ -8,11 +8,21 @@ if (!file_exists(__DIR__ . '/../../config/database.php')) {
 require_once __DIR__ . '/../../config/database2.php'; // Incluye la configuración
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Recibe los datos del formulario
-    $nombre_contribuyente = $_POST['nombre_contribuyente'];
-    $nrc = $_POST['nrc'];
-    $mes = $_POST['mes'];
-    $anio = $_POST['anio'];
+    // Depuración de los datos recibidos
+    echo "<pre>";
+    print_r($_POST); // Verificar todos los datos que se están enviando desde el formulario
+    echo "</pre>";
+
+    // Captura de los campos principales
+    $nombre_contribuyente = $_POST['nombre_contribuyente'] ?? '';
+    $nrc = $_POST['nrc'] ?? '';
+    $mes = $_POST['mes'] ?? '';
+    $anio = $_POST['anio'] ?? '';
+
+    // Verificar que los datos principales no estén vacíos
+    if (empty($nombre_contribuyente) || empty($nrc) || empty($mes) || empty($anio)) {
+        die('Por favor completa todos los campos principales.');
+    }
 
     // Crear conexión con MongoDB
     $client = new MongoDB\Client("mongodb://localhost:27017");
@@ -50,12 +60,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Insertar el documento en la colección
-    $result = $collection->insertOne($document);
+    try {
+        $result = $collection->insertOne($document);
 
-    if ($result->getInsertedCount() === 1) {
-        echo "Datos guardados correctamente.";
-    } else {
-        echo "Error al guardar los datos.";
+        if ($result->getInsertedCount() === 1) {
+            echo "Los datos han sido guardados correctamente.";
+        } else {
+            echo "Error al guardar los datos.";
+        }
+    } catch (Exception $e) {
+        die('Error al insertar los datos: ' . $e->getMessage());
     }
 }
 ?>
