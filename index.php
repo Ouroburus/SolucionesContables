@@ -149,7 +149,7 @@ $controlador->manejarPeticionesControlador();
                         </a>
                     </div>
                     <div class="col-md-4 mb-4">
-                        <a href="balances_diarios.php" class="btn btn-dashboard">
+                        <a href="app/views/content/perfil-vista.php" class="btn btn-dashboard">
                             Planillas
                         </a>
                     </div>
