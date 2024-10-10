@@ -1,23 +1,19 @@
 <?php
-require_once __DIR__ . '/../../vendor/autoload.php'; // Autoload para cargar MongoDB y otras dependencias
 
-// Verifica que el archivo de configuración existe y carga las credenciales de la BD
-if (!file_exists(__DIR__ . '/../../config/database.php')) {
-    die('El archivo database.php no se encuentra en la ruta especificada.');
-}
-require_once __DIR__ . '/../../config/database2.php'; // Incluye la configuración
+function procesar_libro($datos) {
+    require_once __DIR__ . '/../../vendor/autoload.php'; // Autoload para cargar MongoDB y otras dependencias
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Depuración de los datos recibidos
-    echo "<pre>";
-    print_r($_POST); // Verificar todos los datos que se están enviando desde el formulario
-    echo "</pre>";
+    // Verifica que el archivo de configuración existe y carga las credenciales de la BD
+    if (!file_exists(__DIR__ . '/../../config/database.php')) {
+        die('El archivo database.php no se encuentra en la ruta especificada.');
+    }
+    require_once __DIR__ . '/../../config/database2.php'; // Incluye la configuración
 
     // Captura de los campos principales
-    $nombre_contribuyente = $_POST['nombre_contribuyente'] ?? '';
-    $nrc = $_POST['nrc'] ?? '';
-    $mes = $_POST['mes'] ?? '';
-    $anio = $_POST['anio'] ?? '';
+    $nombre_contribuyente = $datos['nombre_contribuyente'] ?? '';
+    $nrc = $datos['nrc'] ?? '';
+    $mes = $datos['mes'] ?? '';
+    $anio = $datos['anio'] ?? '';
 
     // Verificar que los datos principales no estén vacíos
     if (empty($nombre_contribuyente) || empty($nrc) || empty($mes) || empty($anio)) {
@@ -40,21 +36,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     ];
 
     // Recolectar las operaciones de ventas
-    foreach ($_POST['dia'] as $key => $dia) {
+    foreach ($datos['dia'] as $key => $dia) {
         if (!empty($dia)) { // Asegúrate de que el día no esté vacío
             // Añadir la operación al array de operaciones
             $document['operaciones'][] = [
                 'dia' => $dia,
-                'correlativo' => $_POST['correlativo'][$key],
-                'nombre_cliente' => $_POST['nombre_cliente'][$key],
-                'nrc_cliente' => $_POST['nrc_cliente'][$key],
-                'propias_exentas' => $_POST['propias_exentas'][$key],
-                'propias_gravadas' => $_POST['propias_gravadas'][$key],
-                'debito_fiscal' => $_POST['debito_fiscal'][$key],
-                'terceros_exentas' => $_POST['terceros_exentas'][$key],
-                'terceros_gravadas' => $_POST['terceros_gravadas'][$key],
-                'total' => $_POST['total'][$key],
-                'iva_retenido' => $_POST['iva_retenido'][$key]
+                'correlativo' => $datos['correlativo'][$key],
+                'nombre_cliente' => $datos['nombre_cliente'][$key],
+                'nrc_cliente' => $datos['nrc_cliente'][$key],
+                'propias_exentas' => $datos['propias_exentas'][$key],
+                'propias_gravadas' => $datos['propias_gravadas'][$key],
+                'debito_fiscal' => $datos['debito_fiscal'][$key],
+                'terceros_exentas' => $datos['terceros_exentas'][$key],
+                'terceros_gravadas' => $datos['terceros_gravadas'][$key],
+                'total' => $datos['total'][$key],
+                'iva_retenido' => $datos['iva_retenido'][$key]
             ];
         }
     }
@@ -72,4 +68,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         die('Error al insertar los datos: ' . $e->getMessage());
     }
 }
+
 ?>

@@ -14,12 +14,9 @@ require "../../controllers/save_data.php";
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
         }
-        .menu-lateral {
-            background-color: #ffffff;
-            border-right: 0px solid #dee2e6;
-        }
+       
         .contenido {
-            padding: 10px;
+            padding: 0px;
         }
         .datos-agregados {
             margin-top: 20px;
@@ -30,9 +27,6 @@ require "../../controllers/save_data.php";
 <div class="container-fluid">
     <h1 class="mt-5">Libro de Compras</h1>
     <div class="row">
-        <div class="col-md-3 menu-lateral">
-            <?php include "../layouts/MenuLateral.php"; ?>
-        </div>
         <div class="col-md-9 contenido">
             <table class="table table-bordered mt-4" id="libroComprasTable">
                 <thead>

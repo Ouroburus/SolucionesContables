@@ -148,16 +148,8 @@ $controlador->manejarPeticionesControlador();
                             Ventas Consumidor Final
                         </a>
                     </div>
-                    <div class="col-md-4 mb-4">
-                        <a href="app/views/content/perfil-vista.php" class="btn btn-dashboard">
-                            Planillas
-                        </a>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <a href="costos_gastos.php" class="btn btn-dashboard">
-                            Costos y Gastos
-                        </a>
-                    </div>
+                    
+                    
                 </div>
             </main>
         </div>
