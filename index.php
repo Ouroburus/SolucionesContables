@@ -148,7 +148,21 @@ $controlador->manejarPeticionesControlador();
                             Ventas Consumidor Final
                         </a>
                     </div>
-                    
+                    <div class="col-md-4 mb-4">
+                        <a href="app/views/content/planilla.php" class="btn btn-dashboard">
+                            Planillas de salario
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <a href="app/views/content/balanseGeneral.php" class="btn btn-dashboard">
+                            Balance General
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <a href="app/views/content/VistaCompras.php" class="btn btn-dashboard">
+                            Vista Compras
+                        </a>
+                    </div>
                     
                 </div>
             </main>
