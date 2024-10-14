@@ -32,7 +32,7 @@ class VentasControlador {
             // Insertar datos en la colección
             try {
                 $resultado = $this->collection->insertOne($venta);
-                return "Venta registrada con éxito. ID: " . $resultado->getInsertedId();
+                return "Venta registrada con éxito.";
             } catch (Exception $e) {
                 return "Error al registrar la venta: " . $e->getMessage();
             }
