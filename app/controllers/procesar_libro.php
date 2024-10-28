@@ -7,7 +7,7 @@ function procesar_libro($datos) {
     if (!file_exists(__DIR__ . '/../../config/database.php')) {
         die('El archivo database.php no se encuentra en la ruta especificada.');
     }
-    require_once __DIR__ . '/../../config/database2.php'; // Incluye la configuración
+    require_once __DIR__ . '/../../config/database.php'; // Incluye la configuración
 
     // Captura de los campos principales
     $nombre_contribuyente = $datos['nombre_contribuyente'] ?? '';
@@ -21,7 +21,7 @@ function procesar_libro($datos) {
     }
 
     // Crear conexión con MongoDB
-    $client = new MongoDB\Client("mongodb://localhost:27017");
+    $client = new MongoDB\Client("mongodb+srv://Morales:Back1234@cluster0.mvf44.mongodb.net/");
     $db = $client->BDContador; // Asegúrate de que tu base de datos MongoDB se llame "BDContador"
     $collection = $db->LibroContribuyente; // Cambia a "LibroVentas" o el nombre que desees
 

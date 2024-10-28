@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $rows = $_POST['rows']; // Recibimos las filas enviadas desde el formulario
 
     // Crear conexión con MongoDB
-    $client = new MongoDB\Client("mongodb://localhost:27017");
+    $client = new MongoDB\Client("mongodb+srv://Morales:Back1234@cluster0.mvf44.mongodb.net/");
     $db = $client->BDContador; // Asegúrate de que tu base de datos MongoDB se llame "BDContador"
     // La colección en MongoDB donde guardarás los datos
     $collection = $db->LibroCompras; 

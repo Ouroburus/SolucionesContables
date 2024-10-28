@@ -12,7 +12,7 @@ class VentasControlador {
 
     public function __construct() {
         // Crear conexión con MongoDB
-        $client = new MongoDB\Client("mongodb://localhost:27017");
+        $client = new MongoDB\Client("mongodb+srv://Morales:Back1234@cluster0.mvf44.mongodb.net/");
         $db = $client->BDContador; // Cambia 'tu_base_de_datos' por el nombre de tu base de datos
         $this->collection = $db->LibroConsumidor; // Cambia 'ventas' por el nombre de tu colección
     }
