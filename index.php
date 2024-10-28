@@ -159,6 +159,21 @@ $controlador->manejarPeticionesControlador();
                         </a>
                     </div>
                     <div class="col-md-4 mb-4">
+                        <a href="app/views/content/partidas.php" class="btn btn-dashboard">
+                            Partidas de Diario
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <a href="app/views/content/vistaConsumidorF.php" class="btn btn-dashboard">
+                            Vista Consumidor Final
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <a href="app/views/content/vistaContribuyente.php" class="btn btn-dashboard">
+                            Vista Contribuyente
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-4">
                         <a href="app/views/content/VistaCompras.php" class="btn btn-dashboard">
                             Vista Compras
                         </a>

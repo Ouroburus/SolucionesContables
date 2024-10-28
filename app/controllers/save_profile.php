@@ -2,7 +2,7 @@
 // Archivo controlador: save_profile.php
 
 // Conexión a la base de datos (MongoDB)
-require_once(__DIR__ . '/../../config/database4.php'); // Asegúrate de que 'database4.php' conecte a MongoDB
+require_once(__DIR__ . '/../../config/database.php'); // Asegúrate de que 'database4.php' conecte a MongoDB
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Recibir los datos del formulario
@@ -80,3 +80,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "No has iniciado sesión.";
     }
 }
+

@@ -1,11 +1,11 @@
 <?php
-require '../../../config/database5.php'; // Incluir el archivo de conexión con MongoDB
+require '../../../config/database.php'; // Incluir el archivo de conexión con MongoDB
 
 // Crear una nueva conexión a MongoDB
 $conexion = new MongoDBConnection();
 
 // Obtener la colección 'LibroCompras'
-$coleccionCompras = $conexion->obtenerColeccion('LibroCompras');
+$coleccionCompras = $conexion->getCollection('LibroCompras');
 
 // Obtener los documentos de la colección 'LibroCompras'
 $compras = $coleccionCompras->find();
