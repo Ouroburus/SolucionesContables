@@ -36,26 +36,26 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Inicio</a>
+                        <a class="nav-link" href="index.php">Inicio</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="librosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Libros
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="librosDropdown">
-                            <li><a class="dropdown-item" href="#">Compras</a></li>
-                            <li><a class="dropdown-item" href="#">Ventas a Contribuyentes</a></li>
-                            <li><a class="dropdown-item" href="#">Ventas a Consumidor Final</a></li>
+                            <li><a class="dropdown-item" href="app/views/content/Compras.php">Compras</a></li>
+                            <li><a class="dropdown-item" href="app/views/content/LibroContribuyente.php">Ventas a Contribuyentes</a></li>
+                            <li><a class="dropdown-item" href="app/views/content/ventasconsumidor.php">Ventas a Consumidor Final</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Planillas</a>
+                        <a class="nav-link" href="app/views/content/planilla.php">Planillas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Costos y Gastos</a>
+                        <a class="nav-link" href="app/views/content/LibroContribuyente.php">Costos y Gastos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Balance General</a>
+                        <a class="nav-link" href="app/views/content/balanseGeneral.php">Balance General</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Configuración</a>

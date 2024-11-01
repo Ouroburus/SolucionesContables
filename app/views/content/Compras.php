@@ -24,6 +24,7 @@ require "../../controllers/save_data.php";
     </style>
 </head>
 <body>
+<?php include 'app/views/layouts/header.php'?>
 <div class="container-fluid">
     <h1 class="mt-5">Libro de Compras</h1>
     <div class="row">
@@ -91,7 +92,7 @@ require "../../controllers/save_data.php";
             </div>
         </div>
     </div>
-
+    <?php include 'app/views/layouts/footer.php'?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
