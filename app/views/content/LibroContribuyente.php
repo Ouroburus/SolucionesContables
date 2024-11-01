@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-<?php include 'app/views/layouts/header.php'?>
+<?php include '../layouts/header.php'?>
 <div class="container-fluid">
     <h1 class="mt-5">LIBRO DE VENTAS A CONTRIBUYENTES</h1>
 
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
 </div>
-<?php include 'app/views/layouts/footer.php'?>
+<?php include '../layouts/footer.php'?>
 <script>
 function agregarFila() {
     const tabla = document.getElementById('tabla_ventas');

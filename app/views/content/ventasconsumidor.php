@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-<?php include 'app/views/layouts/header.php'?>
+<?php include '../layouts/header.php'?>
     <div class="container">
         <h1 class="mt-4">Registro de Venta a Consumidor Final</h1>
 
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit" class="btn btn-primary mt-3">Guardar</button>
         </form>
     </div>
-    <?php include 'app/views/layouts/footer.php'?>
+    <?php include '../layouts/footer.php'?>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
