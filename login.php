@@ -1,102 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
 <?php
 // Iniciar sesión
 session_start();
-// Verificar si ya hay una sesión activa
-if (isset($_SESSION['usuario'])) {
-    // Redirigir al dashboard o página principal
-    header('Location: index.php');
-    exit();
-}
-// Verificar si el formulario fue enviado
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Obtener los datos del formulario
-    $usuario = $_POST['usuario'];
-    $password = $_POST['password'];
 
-    // Validar credenciales (aquí puedes agregar una validación con base de datos o un usuario estático)
-    if ($usuario === 'admin' && $password === 'admin123') {
+// Incluir la conexión a MongoDB
+require 'vendor/autoload.php'; // Asegúrate de incluir el autoload de Composer
+
+// Conectar a la base de datos
+$client = new MongoDB\Client("mongodb://localhost:27017");
+$database = $client->tu_base_de_datos; // Reemplaza con el nombre de tu base de datos
+$collection = $database->usuarios; // Reemplaza con el nombre de tu colección
+
+// Recibir datos de login
+$usuario = $_POST['usuario'] ?? '';
+$password = $_POST['password'] ?? '';
+
+// Buscar al usuario en la base de datos
+$usuarioEncontrado = $collection->findOne(['usuario' => $usuario]);
+
+if ($usuarioEncontrado) {
+    // Verificar si la contraseña es correcta
+    if (password_verify($password, $usuarioEncontrado['password'])) {
         // Establecer la sesión del usuario
         $_SESSION['usuario'] = $usuario;
+        $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo']; // Puede ser 'admin', 'user', o 'userPro'
 
-        // Redirigir al dashboard
-        header("Location: index.php");
+        // Redirigir según el tipo de usuario
+        if ($usuarioEncontrado['tipo'] === 'admin') {
+            header("Location: admin_dashboard.php");
+        } elseif ($usuarioEncontrado['tipo'] === 'userPro') {
+            header("Location: userPro_dashboard.php");
+        } else {
+            header("Location: user_dashboard.php");
+        }
         exit();
     } else {
-        // Mostrar un mensaje de error si las credenciales no son correctas
-        $error = "Usuario o contraseña incorrectos.";
+        // Contraseña incorrecta
+        $error = "Contraseña incorrecta.";
     }
+} else {
+    // Usuario no encontrado
+    $error = "Usuario no encontrado.";
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Soluciones Contables</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .login-container {
-            max-width: 400px;
-            margin: 100px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .login-container h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .btn-primary {
-            background-color: #d9534f;
-            border-color: #d9534f;
-        }
-
-        .btn-primary:hover {
-            background-color: #c9302c;
-            border-color: #ac2925;
-        }
-
-        .error-message {
-            color: red;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-    </style>
-</head>
-<body>
-
-<div class="login-container">
-    <h2>Soluciones Contables - Login</h2>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <title>Bienvenido a mi Formulario</title>
     
-    <?php if (isset($error)): ?>
-        <div class="error-message">
-            <p><?php echo $error; ?></p>
-        </div>
-    <?php endif; ?>
+</head>
 
-    <form method="POST" action="login.php">
-        <div class="mb-3">
-            <label for="usuario" class="form-label">Usuario</label>
-            <input type="text" class="form-control" id="usuario" name="usuario" required>
+<body>
+    <div class="container-form sign-up">
+        <div class="welcome-back">
+            <div class="message">
+                <h2>Bienvenido a Soluciones Contables</h2>
+                <p>Si ya tienes una cuenta por favor inicia sesion aqui</p>
+                <button class="sign-up-btn">Iniciar Sesion</button>
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Contraseña</label>
-            <input type="password" class="form-control" id="password" name="password" required>
+        <form class="formulario">
+            <h2 class="create-account">Crear una cuenta</h2>
+            <p class="cuenta-gratis">Crear una cuenta gratis</p>
+            <input type="text" placeholder="Nombre">
+            <input type="email" placeholder="Email">
+            <input type="password" placeholder="Contraseña">
+            <input type="button" value="Registrarse">
+        </form>
+    </div>
+    <div class="container-form sign-in">
+        <form class="formulario">
+            <h2 class="create-account">Iniciar Sesion</h2>
+            <p class="cuenta-gratis">¿Aun no tienes una cuenta?</p>
+            <input type="email" placeholder="Email">
+            <input type="password" placeholder="Contraseña">
+            <input type="button" value="Iniciar Sesion">
+        </form>
+        <div class="welcome-back">
+            <div class="message">
+                <h2>Bienvenido de nuevo</h2>
+                <p>Si aun no tienes una cuenta por favor registrese aqui</p>
+                <button class="sign-in-btn">Registrarse</button>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
-    </form>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    </div>
+    <script src="script.js"></script>
 </body>
+
 </html>

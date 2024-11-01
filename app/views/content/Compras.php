@@ -57,7 +57,7 @@ require "../../controllers/save_data.php";
                         <td><input type="text" class="form-control"></td>
                         <td><input type="text" class="form-control"></td>
                         <td><input type="text" class="form-control" readonly></td>
-                        <td><input type="text" class="form-control" readonly></td>
+                        <td><input type="text" class="form-control"></td>
                         <td><input type="text" class="form-control" readonly></td>
                         <td><input type="text" class="form-control"></td>
                     </tr>
