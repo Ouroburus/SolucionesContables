@@ -55,9 +55,9 @@ require "../../controllers/save_data.php";
                         <td><input type="text" class="form-control"></td>
                         <td><input type="text" class="form-control"></td>
                         <td><input type="text" class="form-control"></td>
-                        <td><input type="text" class="form-control"></td>
-                        <td><input type="text" class="form-control"></td>
-                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control" readonly></td>
+                        <td><input type="text" class="form-control" readonly></td>
+                        <td><input type="text" class="form-control" readonly></td>
                         <td><input type="text" class="form-control"></td>
                     </tr>
                 </tbody>
@@ -65,7 +65,6 @@ require "../../controllers/save_data.php";
             <button class="btn btn-primary" id="addRowBtn">Agregar Fila</button>
             <button class="btn btn-success" id="saveDataBtn">Guardar Datos</button>
             
-            <!-- Sección para mostrar las filas agregadas -->
             <div class="datos-agregados">
                 <h3>Datos Agregados:</h3>
                 <table class="table table-bordered" id="vistaDatosAgregados">
@@ -100,9 +99,13 @@ require "../../controllers/save_data.php";
         $(document).ready(function() {
             let rowCount = 1;
 
-            // Función para agregar una nueva fila a la tabla
             $('#addRowBtn').click(function() {
                 let currentRow = $('#libroComprasTable tbody tr').last();
+                let comprasExentas = parseFloat(currentRow.find('input').eq(5).val()) || 0;
+                let comprasGravadas = parseFloat(currentRow.find('input').eq(6).val()) || 0;
+                let creditoFiscal = (comprasGravadas * 0.13).toFixed(2);
+                let totalCompras = (comprasExentas + comprasGravadas + parseFloat(creditoFiscal)).toFixed(2);
+                
                 let row = {
                     'num': rowCount,
                     'emision': currentRow.find('input').eq(0).val(),
@@ -110,15 +113,14 @@ require "../../controllers/save_data.php";
                     'nit_dui': currentRow.find('input').eq(2).val(),
                     'nrc': currentRow.find('input').eq(3).val(),
                     'nombre_proveedor': currentRow.find('input').eq(4).val(),
-                    'compras_exentas': currentRow.find('input').eq(5).val(),
-                    'compras_gravadas': currentRow.find('input').eq(6).val(),
-                    'credito_fiscal': currentRow.find('input').eq(7).val(),
+                    'compras_exentas': comprasExentas,
+                    'compras_gravadas': comprasGravadas,
+                    'credito_fiscal': creditoFiscal,
                     'iva_percibido': currentRow.find('input').eq(8).val(),
-                    'total_compras': currentRow.find('input').eq(9).val(),
-                    'compras_excluidos': currentRow.find('input').eq(10).val()
+                    'total_compras': totalCompras,
+                    'compras_excluidos': currentRow.find('input').eq(11).val()
                 };
 
-                // Agregar los datos a la vista de datos agregados con botones de acción
                 let newRow = `<tr>
                     <td>${row['num']}</td>
                     <td>${row['emision']}</td>
@@ -139,22 +141,16 @@ require "../../controllers/save_data.php";
                 </tr>`;
                 $('#vistaDatosAgregados tbody').append(newRow);
 
-                // Limpiar los inputs de la fila actual
                 currentRow.find('input').val('');
-
                 rowCount++;
             });
 
-            // Función para eliminar una fila de la vista de datos agregados
             $(document).on('click', '.delete-row', function() {
                 $(this).closest('tr').remove();
             });
 
-            // Función para editar una fila de la vista de datos agregados
             $(document).on('click', '.edit-row', function() {
                 let row = $(this).closest('tr');
-                
-                // Pasar los datos de la fila a los inputs del formulario para edición
                 $('#libroComprasTable tbody tr').last().find('input').eq(0).val(row.find('td').eq(1).text());
                 $('#libroComprasTable tbody tr').last().find('input').eq(1).val(row.find('td').eq(2).text());
                 $('#libroComprasTable tbody tr').last().find('input').eq(2).val(row.find('td').eq(3).text());
@@ -165,16 +161,12 @@ require "../../controllers/save_data.php";
                 $('#libroComprasTable tbody tr').last().find('input').eq(7).val(row.find('td').eq(8).text());
                 $('#libroComprasTable tbody tr').last().find('input').eq(8).val(row.find('td').eq(9).text());
                 $('#libroComprasTable tbody tr').last().find('input').eq(9).val(row.find('td').eq(10).text());
-                $('#libroComprasTable tbody tr').last().find('input').eq(10).val(row.find('td').eq(11).text());
                 
-                // Remover la fila editada de la vista de datos agregados
                 row.remove();
             });
 
-            // Función para guardar los datos de la tabla y limpiar la vista
             $('#saveDataBtn').click(function() {
                 let rows = [];
-
                 $('#vistaDatosAgregados tbody tr').each(function() {
                     let row = {};
                     row['num'] = $(this).find('td').eq(0).text();
@@ -192,24 +184,10 @@ require "../../controllers/save_data.php";
                     rows.push(row);
                 });
 
-                // Enviar los datos al servidor
-                $.ajax({
-                    url: '../../controllers/save_data.php',
-                    method: 'POST',
-                    data: { rows: rows },
-                    success: function(response) {
-                        alert('Datos guardados con éxito: ' + response);
-
-                        // Limpiar la vista de datos agregados
-                        $('#vistaDatosAgregados tbody').empty();
-                    },
-                    error: function() {
-                        alert('Error al guardar los datos.');
-                    }
-                });
+                console.log(rows);
+                // Aquí puedes hacer la llamada AJAX para guardar los datos en el servidor
             });
         });
     </script>
-</div>
 </body>
 </html>

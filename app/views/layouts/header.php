@@ -3,25 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soluciones Contables</title>
+    <title>Navbar Soluciones Contables</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #343a40; /* Color de fondo de la navbar */
+        }
+        .navbar-brand {
+            color: #ffffff; /* Color del texto de la marca */
+        }
+        .nav-link {
+            color: #ffffff; /* Color de los enlaces */
+        }
+        .nav-link:hover {
+            color: #f8f9fa; /* Color del texto al pasar el mouse */
+        }
+        .dropdown-menu {
+            left: -100px; /* Ajuste del menú desplegable para alinearlo bien */
+        }
+    </style>
 </head>
 <body>
-<header class="navbar navbar-dark sticky-top bg-danger flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="index.php">
-        <img src="/public/img/logo.png" alt="Logo" width="30" height="30">
-        Soluciones Contables
-    </a>
-    <div class="navbar-nav">
-        <div class="nav-item text-nowrap">
-            <a class="nav-link px-3" href="#" id="perfilDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-person-circle"></i> Perfil
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="perfilDropdown">
-                <li><a class="dropdown-item" href="#">Ver Perfil</a></li>
-                <li><a class="dropdown-item" href="#">Configuración</a></li>
-                <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
-            </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Soluciones Contables</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Inicio</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="librosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Libros
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="librosDropdown">
+                            <li><a class="dropdown-item" href="#">Compras</a></li>
+                            <li><a class="dropdown-item" href="#">Ventas a Contribuyentes</a></li>
+                            <li><a class="dropdown-item" href="#">Ventas a Consumidor Final</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Planillas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Costos y Gastos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Balance General</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Configuración</a>
+                    </li>
+                </ul>
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="path/to/profile-icon.png" alt="Perfil" style="width: 24px; height: 24px;">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                        <li><a class="dropdown-item" href="#">Cerrar sesión</a></li>
+                        <li><a class="dropdown-item" href="#">Modificar perfil</a></li>
+                        <li><a class="dropdown-item" href="#">Cambiar contraseña</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-</header>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
