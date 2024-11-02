@@ -23,6 +23,7 @@ if ($usuarioEncontrado) {
     // Verificar si la contraseña es correcta
     if (password_verify($password, $usuarioEncontrado['password'])) {
         // Establecer la sesión del usuario
+        $_SESSION['loggedin'] = true; // Agrega esta línea para establecer la sesión de autenticación
         $_SESSION['usuario'] = $usuario;
         $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo']; // Puede ser 'admin', 'user', o 'userPro'
 
@@ -76,7 +77,7 @@ if ($usuarioEncontrado) {
         </form>
     </div>
     <div class="container-form sign-in">
-        <form class="formulario">
+        <form class="formulario" method="POST" action="login.php">
             <h2 class="create-account">Iniciar Sesion</h2>
             <p class="cuenta-gratis">¿Aun no tienes una cuenta?</p>
             <input type="email" placeholder="Email">
