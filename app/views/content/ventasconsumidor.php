@@ -1,17 +1,3 @@
-<?php
-require_once '../../controllers/ControllVCF.php';
-
-$controlador = new VentasControlador();
-
-// Manejar la inserción de venta
-$mensaje = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Guardar los datos, se supone que los datos se envían desde el formulario
-    $mensaje = $controlador->guardarVenta(); // Asegúrate de que tu método guarda correctamente
-}
-
-?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -33,10 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-<?php include '../layouts/header.php'?>
+    <?php include '../layouts/header.php' ?>
     <div class="container">
         <h1 class="mt-4">Registro de Venta a Consumidor Final</h1>
-
+        
         <!-- Mensaje de confirmación -->
         <?php if (!empty($mensaje)): ?>
             <div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
@@ -47,39 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- Formulario -->
         <form id="formulario" method="POST" action="ventasconsumidor.php" onsubmit="return agregarDatosATabla()">
-        <table>
-    <tr>
-        <td>Fecha:</td>
-        <td><input type="date" name="fecha" id="fecha"></td>
-        <td>Documento Inicio:</td>
-        <td><input type="text" name="documento_inicio" id="documento_inicio"></td>
-    </tr>
-    <tr>
-        <td>Documento Final:</td>
-        <td><input type="text" name="documento_final" id="documento_final"></td>
-        <td>Nº CAJA O SIST. COMPUTARIZADO:</td>
-        <td><input type="text" name="nro_caja" id="nro_caja"></td>
-    </tr>
-    <tr>
-        <td>Ventas Exentas:</td>
-        <td><input type="number" step="0.01" name="ventas_exentas" id="ventas_exentas"></td>
-        <td>Ventas Internas Gravadas:</td>
-        <td><input type="number" step="0.01" name="ventas_gravadas" id="ventas_gravadas"></td>
-    </tr>
-    <tr>
-        <td>Exportaciones:</td>
-        <td><input type="number" step="0.01" name="exportaciones" id="exportaciones"></td>
-        <td>Total Ventas Diarias Propias:</td>
-        <td><input type="number" step="0.01" name="total_ventas_diarias" id="total_ventas_diarias" readonly></td>
-    </tr>
-    <tr>
-        <td>Venta a Cuentas de Terceros:</td>
-        <td><input type="number" step="0.01" name="venta_cuenta_terceros" id="venta_cuenta_terceros"></td>
-    </tr>
-</table>
+            <!-- Campos del formulario -->
+            <!-- ... Tu código HTML de entrada aquí ... -->
 
-
-<h2 class="mt-4">Detalles de Ventas</h2>
+            <h2 class="mt-4">Detalles de Ventas</h2>
             <table class="table">
                 <thead>
                     <tr>
@@ -99,33 +56,79 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <tbody id="tabla_ventas">
                     <!-- Filas dinámicas -->
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="5">Totales:</th>
+                        <td id="total_ventas_exentas">0.00</td>
+                        <td id="total_ventas_gravadas">0.00</td>
+                        <td id="total_exportaciones">0.00</td>
+                        <td id="total_ventas_diarias">0.00</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
             </table>
-            <div class="row mb-3">
-                <label for="total_acumulado_ventas_diarias" class="col-sm-2 col-form-label">Total Acumulado Ventas Diarias</label>
-                <div class="col-sm-10">
-                    <input type="number" step="0.01" class="form-control" id="total_acumulado_ventas_diarias" readonly>
-                </div>
-            </div>
+
+            <!-- Mini tabla de Venta Neta y Débito Fiscal -->
+            <h3 class="mt-4">Resumen Fiscal</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Venta Neta</th>
+                        <th>Débito Fiscal</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="venta_neta">0.00</td>
+                        <td id="debito_fiscal">0.00</td>
+                        <td id="total_fiscal">0.00</td>
+                    </tr>
+                </tbody>
+            </table>
+
             <button type="button" class="btn btn-secondary mt-3" onclick="agregarFila()">Agregar Fila</button>
             <button type="submit" class="btn btn-primary mt-3">Guardar</button>
         </form>
     </div>
-    <?php include '../layouts/footer.php'?>
+    <?php include '../layouts/footer.php' ?>
+    
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    let filaEditada = null; // Para almacenar la fila que se está editando
+    let filaEditada = null;
 
-    function actualizarTotalVentasDiarias() {
-        // Obtiene el valor de ventas gravadas e inserta en total ventas diarias
-        const ventasGravadas = parseFloat(document.getElementById('ventas_gravadas').value) || 0;
-        document.getElementById('total_ventas_diarias').value = ventasGravadas;
+    function calcularTotales() {
+        let totalVentasExentas = 0, totalVentasGravadas = 0, totalExportaciones = 0, totalVentasDiarias = 0;
+
+        document.querySelectorAll('#tabla_ventas tr').forEach(row => {
+            totalVentasExentas += parseFloat(row.cells[5].innerText) || 0;
+            totalVentasGravadas += parseFloat(row.cells[6].innerText) || 0;
+            totalExportaciones += parseFloat(row.cells[7].innerText) || 0;
+            totalVentasDiarias += parseFloat(row.cells[8].innerText) || 0;
+        });
+
+        document.getElementById('total_ventas_exentas').innerText = totalVentasExentas.toFixed(2);
+        document.getElementById('total_ventas_gravadas').innerText = totalVentasGravadas.toFixed(2);
+        document.getElementById('total_exportaciones').innerText = totalExportaciones.toFixed(2);
+        document.getElementById('total_ventas_diarias').innerText = totalVentasDiarias.toFixed(2);
+
+        // Calcula Venta Neta y Débito Fiscal
+        const ventaNeta = totalVentasDiarias / 1.13;
+        const debitoFiscal = totalVentasDiarias * 0.13;
+        const totalFiscal = ventaNeta + debitoFiscal;
+
+        document.getElementById('venta_neta').innerText = ventaNeta.toFixed(2);
+        document.getElementById('debito_fiscal').innerText = debitoFiscal.toFixed(2);
+        document.getElementById('total_fiscal').innerText = totalFiscal.toFixed(2);
     }
 
     function agregarFila() {
         const tabla = document.getElementById('tabla_ventas');
         const fila = document.createElement('tr');
 
+        // Obtén los valores del formulario
         const fecha = document.getElementById('fecha').value;
         const documentoInicio = document.getElementById('documento_inicio').value;
         const documentoFinal = document.getElementById('documento_final').value;
@@ -133,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const ventasExentas = document.getElementById('ventas_exentas').value;
         const ventasGravadas = document.getElementById('ventas_gravadas').value;
         const exportaciones = document.getElementById('exportaciones').value;
-        const totalVentasDiarias = ventasGravadas; // Valor bloqueado
+        const totalVentasDiarias = ventasGravadas;
         const ventaCuentaTerceros = document.getElementById('venta_cuenta_terceros').value;
 
         fila.innerHTML = `
@@ -160,63 +163,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             tabla.appendChild(fila);
         }
 
+        calcularTotales();
         limpiarFormulario();
-    }
-
-    function limpiarFormulario() {
-        document.getElementById('fecha').value = '';
-        document.getElementById('documento_inicio').value = '';
-        document.getElementById('documento_final').value = '';
-        document.getElementById('nro_caja').value = '';
-        document.getElementById('ventas_exentas').value = '';
-        document.getElementById('ventas_gravadas').value = '';
-        document.getElementById('exportaciones').value = '';
-        document.getElementById('total_ventas_diarias').value = ''; // Valor bloqueado
-        document.getElementById('venta_cuenta_terceros').value = ''; // Nuevo campo
     }
 
     function eliminarFila(boton) {
         const fila = boton.parentNode.parentNode;
         fila.parentNode.removeChild(fila);
-    }
-
-    function editarFila(boton) {
-        const fila = boton.parentNode.parentNode;
-
-        document.getElementById('fecha').value = fila.cells[1].innerText;
-        document.getElementById('documento_inicio').value = fila.cells[2].innerText;
-        document.getElementById('documento_final').value = fila.cells[3].innerText;
-        document.getElementById('nro_caja').value = fila.cells[4].innerText;
-        document.getElementById('ventas_exentas').value = fila.cells[5].innerText;
-        document.getElementById('ventas_gravadas').value = fila.cells[6].innerText;
-        document.getElementById('exportaciones').value = fila.cells[7].innerText;
-        document.getElementById('total_ventas_diarias').value = fila.cells[8].innerText; // Valor bloqueado
-        document.getElementById('venta_cuenta_terceros').value = fila.cells[9].innerText; // Nuevo campo
-
-        filaEditada = fila;
-    }
-
-    function agregarDatosATabla() {
-        const tabla = document.getElementById('tabla_ventas');
-        const datosTabla = [];
-
-        for (let i = 0; i < tabla.rows.length; i++) {
-            const fila = tabla.rows[i];
-            datosTabla.push({
-                fecha: fila.cells[1].innerText,
-                documento_inicio: fila.cells[2].innerText,
-                documento_final: fila.cells[3].innerText,
-                nro_caja: fila.cells[4].innerText,
-                ventas_exentas: fila.cells[5].innerText,
-                ventas_gravadas: fila.cells[6].innerText,
-                exportaciones: fila.cells[7].innerText,
-                total_ventas_diarias: fila.cells[8].innerText,
-                venta_cuenta_terceros: fila.cells[9].innerText // Nuevo campo
-            });
-        }
-
-        console.log(datosTabla);
-        return false; // Evita la recarga de la página
+        calcularTotales();
     }
     </script>
 </body>
