@@ -8,9 +8,9 @@ session_start();
 require 'vendor/autoload.php'; // Asegúrate de incluir el autoload de Composer
 
 // Conectar a la base de datos
-$client = new MongoDB\Client("mongodb://localhost:27017");
-$database = $client->tu_base_de_datos; // Reemplaza con el nombre de tu base de datos
-$collection = $database->usuarios; // Reemplaza con el nombre de tu colección
+$client = new MongoDB\Client("mongodb+srv://Morales:Back1234@cluster0.mvf44.mongodb.net/");
+$database = $client->BDContador; // Reemplaza con el nombre de tu base de datos
+$collection = $database->User; // Reemplaza con el nombre de tu colección
 
 // Recibir datos de login
 $usuario = $_POST['usuario'] ?? '';
@@ -63,36 +63,61 @@ if ($usuarioEncontrado) {
         <div class="welcome-back">
             <div class="message">
                 <h2>Bienvenido a Soluciones Contables</h2>
-                <p>Si ya tienes una cuenta por favor inicia sesion aqui</p>
-                <button class="sign-up-btn">Iniciar Sesion</button>
+                <p>Si ya tienes una cuenta por favor inicia sesión aquí</p>
+                <button class="sign-up-btn" onclick="toggleForm()">Iniciar Sesión</button>
             </div>
         </div>
-        <form class="formulario">
+        <style>
+    .form-button {
+        padding: 1rem;
+        font-weight: 400;
+        background-color: #4a4aee;
+        border-radius: 2rem;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        font-size: .9rem;
+        margin-top: 2rem;
+        transition: all .3s ease-in;
+        color: #fff;
+        width: 60%;
+    }
+
+    .form-button:hover {
+        background-color: #6464f8;
+    }
+</style>
+        <form class="formulario" method="POST" action="register.php">
             <h2 class="create-account">Crear una cuenta</h2>
             <p class="cuenta-gratis">Crear una cuenta gratis</p>
-            <input type="text" placeholder="Nombre">
-            <input type="email" placeholder="Email">
-            <input type="password" placeholder="Contraseña">
-            <input type="button" value="Registrarse">
+            <input type="text" name="nombre" placeholder="Nombre" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit" class="form-button">Registrarse</button>
         </form>
     </div>
     <div class="container-form sign-in">
         <form class="formulario" method="POST" action="login.php">
-            <h2 class="create-account">Iniciar Sesion</h2>
-            <p class="cuenta-gratis">¿Aun no tienes una cuenta?</p>
-            <input type="email" placeholder="Email">
-            <input type="password" placeholder="Contraseña">
-            <input type="button" value="Iniciar Sesion">
+            <h2 class="create-account">Iniciar Sesión</h2>
+            <p class="cuenta-gratis">¿Aún no tienes una cuenta?</p>
+            <input type="text" name="usuario" placeholder="Usuario" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit" class="form-button">Iniciar Sesión</button>
         </form>
         <div class="welcome-back">
             <div class="message">
                 <h2>Bienvenido de nuevo</h2>
-                <p>Si aun no tienes una cuenta por favor registrese aqui</p>
-                <button class="sign-in-btn">Registrarse</button>
+                <p>Si aún no tienes una cuenta, por favor regístrate aquí</p>
+                <button class="sign-in-btn" onclick="toggleForm()">Registrarse</button>
             </div>
         </div>
     </div>
-    <script src="script.js"></script>
-</body>
+    <script>
+        function toggleForm() {
+            document.querySelector('.container-form.sign-up').classList.toggle('active');
+            document.querySelector('.container-form.sign-in').classList.toggle('active');
+        }
+    </script>
 
+</body>
 </html>
