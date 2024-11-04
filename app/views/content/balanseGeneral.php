@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<?php include '../layouts/header.php'?>
+<?php include '../layouts/Header.php'?>
 <div class="container mt-5">
     <h3 class="text-center mb-4">Balance General</h3>
     <table class="table table-bordered table-hover table-striped">
@@ -109,6 +109,10 @@
             </tr>
         </tbody>
     </table>
+
+    <!-- Botón para guardar los datos en MongoDB -->
+    <button class="btn btn-primary mt-3" onclick="guardarEnMongoDB()">Guardar en MongoDB</button>
+    <p id="resultado" class="mt-2"></p>
 </div>
 
 <?php include '../layouts/footer.php'?>
@@ -137,6 +141,29 @@ function actualizarTotalPasivos() {
     });
 
     document.getElementById('totalPasivos').textContent = totalPasivos.toFixed(2); // Actualiza el total de pasivos
+}
+
+// Función para guardar en MongoDB usando AJAX
+function guardarEnMongoDB() {
+    const totalActivos = parseFloat(document.getElementById('totalActivos').textContent);
+    const totalPasivos = parseFloat(document.getElementById('totalPasivos').textContent);
+
+    // Realiza la petición AJAX
+    fetch('guardarBalance.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `totalActivos=${totalActivos}&totalPasivos=${totalPasivos}`
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById('resultado').textContent = data; // Muestra el mensaje de respuesta
+    })
+    .catch(error => {
+        document.getElementById('resultado').textContent = 'Error al guardar en MongoDB';
+        console.error('Error:', error);
+    });
 }
 </script>
 </body>

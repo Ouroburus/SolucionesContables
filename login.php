@@ -5,32 +5,32 @@
 session_start();
 
 // Incluir la conexión a MongoDB
-require 'vendor/autoload.php'; // Asegúrate de incluir el autoload de Composer
+require 'vendor/autoload.php';
 
 // Conectar a la base de datos
 $client = new MongoDB\Client("mongodb+srv://Morales:Back1234@cluster0.mvf44.mongodb.net/");
-$database = $client->BDContador; // Reemplaza con el nombre de tu base de datos
-$collection = $database->User; // Reemplaza con el nombre de tu colección
+$database = $client->BDContador;
+$collection = $database->Users;
 
 // Recibir datos de login
 $usuario = $_POST['usuario'] ?? '';
 $password = $_POST['password'] ?? '';
 
 // Buscar al usuario en la base de datos
-$usuarioEncontrado = $collection->findOne(['usuario' => $usuario]);
+$usuarioEncontrado = $collection->findOne(['User' => $usuario]);
 
 if ($usuarioEncontrado) {
     // Verificar si la contraseña es correcta
-    if (password_verify($password, $usuarioEncontrado['password'])) {
+    if ($password === $usuarioEncontrado['password']) {
         // Establecer la sesión del usuario
-        $_SESSION['loggedin'] = true; // Agrega esta línea para establecer la sesión de autenticación
+        $_SESSION['loggedin'] = true;
         $_SESSION['usuario'] = $usuario;
-        $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo']; // Puede ser 'admin', 'user', o 'userPro'
+        $_SESSION['tipo_usuario'] = $usuarioEncontrado['type'];
 
         // Redirigir según el tipo de usuario
-        if ($usuarioEncontrado['tipo'] === 'admin') {
-            header("Location: admin_dashboard.php");
-        } elseif ($usuarioEncontrado['tipo'] === 'userPro') {
+        if ($usuarioEncontrado['type'] === 'admin') {
+            header("Location: index.php");
+        } elseif ($usuarioEncontrado['type'] === 'userPro') {
             header("Location: userPro_dashboard.php");
         } else {
             header("Location: user_dashboard.php");
@@ -45,6 +45,7 @@ if ($usuarioEncontrado) {
     $error = "Usuario no encontrado.";
 }
 ?>
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -55,7 +56,6 @@ if ($usuarioEncontrado) {
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <title>Bienvenido a mi Formulario</title>
-    
 </head>
 
 <body>
@@ -67,26 +67,6 @@ if ($usuarioEncontrado) {
                 <button class="sign-up-btn" onclick="toggleForm()">Iniciar Sesión</button>
             </div>
         </div>
-        <style>
-    .form-button {
-        padding: 1rem;
-        font-weight: 400;
-        background-color: #4a4aee;
-        border-radius: 2rem;
-        border: none;
-        outline: none;
-        cursor: pointer;
-        font-size: .9rem;
-        margin-top: 2rem;
-        transition: all .3s ease-in;
-        color: #fff;
-        width: 60%;
-    }
-
-    .form-button:hover {
-        background-color: #6464f8;
-    }
-</style>
         <form class="formulario" method="POST" action="register.php">
             <h2 class="create-account">Crear una cuenta</h2>
             <p class="cuenta-gratis">Crear una cuenta gratis</p>
@@ -96,8 +76,9 @@ if ($usuarioEncontrado) {
             <button type="submit" class="form-button">Registrarse</button>
         </form>
     </div>
+    
     <div class="container-form sign-in">
-        <form class="formulario" method="POST" action="login.php">
+        <form class="formulario" method="POST" action="">
             <h2 class="create-account">Iniciar Sesión</h2>
             <p class="cuenta-gratis">¿Aún no tienes una cuenta?</p>
             <input type="text" name="usuario" placeholder="Usuario" required>
@@ -112,12 +93,17 @@ if ($usuarioEncontrado) {
             </div>
         </div>
     </div>
+
     <script>
         function toggleForm() {
             document.querySelector('.container-form.sign-up').classList.toggle('active');
             document.querySelector('.container-form.sign-in').classList.toggle('active');
         }
     </script>
+
+    <?php if (isset($error)): ?>
+        <script>alert("<?php echo $error; ?>");</script>
+    <?php endif; ?>
 
 </body>
 </html>

@@ -53,29 +53,29 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     </style>
 </head>
 <body>
-<?php include 'app/views/layouts/header.php'?>
+<?php include 'app/views/layouts/Header.php'?>
     
 
     <div class="container dashboard">
         <h1 class="text-center">Dashboard</h1>
         <div class="row justify-content-center">
             <div class="col-md-3">
-                <a href="#" class="btn btn-custom btn-dashboard">Compras</a>
+                <a href="app/views/content/Compras.php" class="btn btn-custom btn-dashboard">Compras</a>
             </div>
             <div class="col-md-3">
-                <a href="#" class="btn btn-custom btn-dashboard">Ventas Consumidor</a>
+                <a href="app/views/content/ventasconsumidor.php" class="btn btn-custom btn-dashboard">Ventas Consumidor</a>
             </div>
             <div class="col-md-3">
-                <a href="#" class="btn btn-custom btn-dashboard">Ventas Contribuyente</a>
+                <a href="app/views/content/LibroContribuyente.php" class="btn btn-custom btn-dashboard">Ventas Contribuyente</a>
             </div>
             <div class="col-md-3">
-                <a href="#" class="btn btn-custom btn-dashboard">Planillas</a>
+                <a href="app/views/content/planilla.php" class="btn btn-custom btn-dashboard">Planillas</a>
             </div>
             <div class="col-md-3">
-                <a href="#" class="btn btn-custom btn-dashboard">Costos y Gastos</a>
+                <a href="app/views/content/costos.php" class="btn btn-custom btn-dashboard">Costos y Gastos</a>
             </div>
             <div class="col-md-3">
-                <a href="#" class="btn btn-custom btn-dashboard">Balance General</a>
+                <a href="app/views/content/balanseGeneral.php" class="btn btn-custom btn-dashboard">Balance General</a>
             </div>
         </div>
     </div>

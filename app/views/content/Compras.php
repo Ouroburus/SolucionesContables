@@ -1,5 +1,5 @@
 <?php
-require "../../controllers/save_data.php";
+require "../../controllers/CCompras.php";
 ?>
 
 <!DOCTYPE html>
@@ -14,9 +14,12 @@ require "../../controllers/save_data.php";
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
         }
-       
+        .menu-lateral {
+            background-color: #ffffff;
+            border-right: 0px solid #dee2e6;
+        }
         .contenido {
-            padding: 0px;
+            padding: 10px;
         }
         .datos-agregados {
             margin-top: 20px;
@@ -24,10 +27,12 @@ require "../../controllers/save_data.php";
     </style>
 </head>
 <body>
-<?php include '../layouts/header.php'?>
 <div class="container-fluid">
     <h1 class="mt-5">Libro de Compras</h1>
     <div class="row">
+
+            <?php include "../layouts/Header.php"; ?>
+
         <div class="col-md-9 contenido">
             <table class="table table-bordered mt-4" id="libroComprasTable">
                 <thead>
@@ -39,13 +44,12 @@ require "../../controllers/save_data.php";
                         <th>NRC</th>
                         <th>Nombre del Proveedor</th>
                         <th>Compras Exentas</th>
-                        <th>Importaciones/Exportaciones Exentas</th>
                         <th>Compras Gravadas</th>
-                        <th>Importaciones/Exportaciones Gravadas</th>
                         <th>Crédito Fiscal</th>
                         <th>IVA Percibido</th>
                         <th>Total Compras</th>
                         <th>Compras a Sujetos Excluidos</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,62 +60,46 @@ require "../../controllers/save_data.php";
                         <td><input type="text" class="form-control"></td>
                         <td><input type="text" class="form-control"></td>
                         <td><input type="text" class="form-control"></td>
-                        <td><input type="number" class="form-control"></td>
-                        <td><input type="number" class="form-control"></td>
-                        <td><input type="number" class="form-control"></td>
-                        <td><input type="number" class="form-control"></td>
-                        <td><input type="text" class="form-control" readonly></td>
-                        <td><input type="number" class="form-control"></td>
-                        <td><input type="text" class="form-control" readonly></td>
-                        <td><input type="number" class="form-control"></td>
+                        <td><input type="number" class="form-control exentas" value="0"></td>
+                        <td><input type="number" class="form-control gravadas" value="0"></td>
+                        <td><input type="text" class="form-control credito-fiscal" value="0" readonly></td>
+                        <td><input type="text" class="form-control iva-percibido" value="0" ></td>
+                        <td><input type="text" class="form-control total-compras" value="0" readonly></td>
+                        <td><input type="text" class="form-control" value="0"></td>
+                        <td><button class="btn btn-danger removeRowBtn">Eliminar</button></td>
                     </tr>
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="6" class="text-end">Totales:</td>
-                        <td id="totalComprasExentas">0.00</td>
-                        <td id="totalImportExentas">0.00</td>
-                        <td id="totalComprasGravadas">0.00</td>
-                        <td id="totalImportGravadas">0.00</td>
-                        <td id="totalCreditoFiscal">0.00</td>
-                        <td id="totalIvaPercibido">0.00</td>
-                        <td id="totalCompras">0.00</td>
-                        <td id="totalComprasExcluidas">0.00</td>
-                    </tr>
-                </tfoot>
             </table>
             <button class="btn btn-primary" id="addRowBtn">Agregar Fila</button>
             <button class="btn btn-success" id="saveDataBtn">Guardar Datos</button>
             
+            <!-- Sección para mostrar los totales -->
             <div class="datos-agregados">
-                <h3>Datos Agregados:</h3>
-                <table class="table table-bordered" id="vistaDatosAgregados">
+                <h3>Totales:</h3>
+                <table class="table table-bordered" id="totalesTable">
                     <thead>
                         <tr>
-                            <th>N°</th>
-                            <th>Emisión</th>
-                            <th>Número Documento</th>
-                            <th>NIT o DUI</th>
-                            <th>NRC</th>
-                            <th>Nombre del Proveedor</th>
                             <th>Compras Exentas</th>
-                            <th>Importaciones/Exportaciones Exentas</th>
                             <th>Compras Gravadas</th>
-                            <th>Importaciones/Exportaciones Gravadas</th>
-                            <th>Crédito Fiscal</th>
-                            <th>IVA Percibido</th>
-                            <th>Total Compras</th>
-                            <th>Compras a Sujetos Excluidos</th>
-                            <th>Acciones</th>
+                            <th>Crédito Fiscal Total</th>
+                            <th>IVA Percibido Total</th>
+                            <th>Total Compras Total</th>
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td id="totalExentas">0</td>
+                            <td id="totalGravadas">0</td>
+                            <td id="totalCreditoFiscal">0</td>
+                            <td id="totalIva">0</td>
+                            <td id="totalCompras">0</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    <?php include '../layouts/footer.php'?>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -119,73 +107,117 @@ require "../../controllers/save_data.php";
         $(document).ready(function() {
             let rowCount = 1;
 
-            function updateTotals() {
-                let totalComprasExentas = 0;
-                let totalImportExentas = 0;
-                let totalComprasGravadas = 0;
-                let totalImportGravadas = 0;
-                let totalCreditoFiscal = 0;
-                let totalIvaPercibido = 0;
-                let totalCompras = 0;
-                let totalComprasExcluidas = 0;
-
-                $('#vistaDatosAgregados tbody tr').each(function() {
-                    totalComprasExentas += parseFloat($(this).find('td').eq(6).text()) || 0;
-                    totalImportExentas += parseFloat($(this).find('td').eq(7).text()) || 0;
-                    totalComprasGravadas += parseFloat($(this).find('td').eq(8).text()) || 0;
-                    totalImportGravadas += parseFloat($(this).find('td').eq(9).text()) || 0;
-                    totalCreditoFiscal += parseFloat($(this).find('td').eq(10).text()) || 0;
-                    totalIvaPercibido += parseFloat($(this).find('td').eq(11).text()) || 0;
-                    totalCompras += parseFloat($(this).find('td').eq(12).text()) || 0;
-                    totalComprasExcluidas += parseFloat($(this).find('td').eq(13).text()) || 0;
-                });
-
-                $('#totalComprasExentas').text(totalComprasExentas.toFixed(2));
-                $('#totalImportExentas').text(totalImportExentas.toFixed(2));
-                $('#totalComprasGravadas').text(totalComprasGravadas.toFixed(2));
-                $('#totalImportGravadas').text(totalImportGravadas.toFixed(2));
-                $('#totalCreditoFiscal').text(totalCreditoFiscal.toFixed(2));
-                $('#totalIvaPercibido').text(totalIvaPercibido.toFixed(2));
-                $('#totalCompras').text(totalCompras.toFixed(2));
-                $('#totalComprasExcluidas').text(totalComprasExcluidas.toFixed(2));
-            }
-
+            // Función para agregar una nueva fila a la tabla
             $('#addRowBtn').click(function() {
-                let currentRow = $('#libroComprasTable tbody tr').last();
-                let comprasExentas = parseFloat(currentRow.find('input').eq(5).val()) || 0;
-                let importExentas = parseFloat(currentRow.find('input').eq(6).val()) || 0;
-                let comprasGravadas = parseFloat(currentRow.find('input').eq(7).val()) || 0;
-                let importGravadas = parseFloat(currentRow.find('input').eq(8).val()) || 0;
-                let creditoFiscal = (comprasGravadas + importGravadas) * 0.13;
-                let totalCompras = comprasExentas + importExentas + comprasGravadas + importGravadas + creditoFiscal;
-
+                rowCount++;
                 let newRow = `<tr>
                     <td>${rowCount}</td>
-                    <td>${currentRow.find('input').eq(0).val()}</td>
-                    <td>${currentRow.find('input').eq(1).val()}</td>
-                    <td>${currentRow.find('input').eq(2).val()}</td>
-                    <td>${currentRow.find('input').eq(3).val()}</td>
-                    <td>${currentRow.find('input').eq(4).val()}</td>
-                    <td>${comprasExentas.toFixed(2)}</td>
-                    <td>${importExentas.toFixed(2)}</td>
-                    <td>${comprasGravadas.toFixed(2)}</td>
-                    <td>${importGravadas.toFixed(2)}</td>
-                    <td>${creditoFiscal.toFixed(2)}</td>
-                    <td>${parseFloat(currentRow.find('input').eq(9).val() || 0).toFixed(2)}</td>
-                    <td>${totalCompras.toFixed(2)}</td>
-                    <td>${parseFloat(currentRow.find('input').eq(11).val() || 0).toFixed(2)}</td>
-                    <td><button class="btn btn-danger btn-sm deleteRowBtn">Eliminar</button></td>
+                    <td><input type="date" class="form-control"></td>
+                    <td><input type="text" class="form-control"></td>
+                    <td><input type="text" class="form-control"></td>
+                    <td><input type="text" class="form-control"></td>
+                    <td><input type="text" class="form-control"></td>
+                    <td><input type="number" class="form-control exentas" value="0"></td>
+                    <td><input type="number" class="form-control gravadas" value="0"></td>
+                    <td><input type="text" class="form-control credito-fiscal" value="0" readonly></td>
+                    <td><input type="text" class="form-control iva-percibido" value="0" readonly></td>
+                    <td><input type="text" class="form-control total-compras" value="0" readonly></td>
+                    <td><input type="text" class="form-control" value="0"></td>
+                    <td><button class="btn btn-danger removeRowBtn">Eliminar</button></td>
                 </tr>`;
-                $('#vistaDatosAgregados tbody').append(newRow);
-                rowCount++;
-                updateTotals();
+                $('#libroComprasTable tbody').append(newRow);
+                calculateTotals();
             });
 
-            $('#vistaDatosAgregados').on('click', '.deleteRowBtn', function() {
+            // Función para calcular totales
+            function calculateTotals() {
+                let totalExentas = 0;
+                let totalGravadas = 0;
+                let totalCreditoFiscal = 0;
+                let totalIva = 0;
+                let totalCompras = 0;
+
+                $('#libroComprasTable tbody tr').each(function() {
+                    let exentas = parseFloat($(this).find('.exentas').val()) || 0;
+                    let gravadas = parseFloat($(this).find('.gravadas').val()) || 0;
+
+                    // Calcular Crédito Fiscal y IVA
+                    let creditoFiscal = gravadas * 0.13; // Ejemplo: 15% de crédito fiscal
+                    let iva = gravadas * 0.13; // Ejemplo: 15% de IVA
+                    let percivido = gravadas * 0.01;
+                    $(this).find('.credito-fiscal').val(creditoFiscal.toFixed(2));
+                    $(this).find('.iva-percibido').val(percivido.toFixed(2));
+
+                    // Calcular Total Compras
+                    let total = exentas + gravadas + creditoFiscal + iva;
+                    $(this).find('.total-compras').val(total.toFixed(2));
+
+                    // Sumar a totales
+                    totalExentas += exentas;
+                    totalGravadas += gravadas;
+                    totalCreditoFiscal += creditoFiscal;
+                    totalIva += percivido;
+                    totalCompras += total;
+                });
+
+                // Actualizar los totales en la tabla
+                $('#totalExentas').text(totalExentas.toFixed(2));
+                $('#totalGravadas').text(totalGravadas.toFixed(2));
+                $('#totalCreditoFiscal').text(totalCreditoFiscal.toFixed(2));
+                $('#totalIva').text(totalIva.toFixed(2));
+                $('#totalCompras').text(totalCompras.toFixed(2));
+            }
+
+            // Al modificar los campos de exentas y gravadas
+            $(document).on('input', '.exentas, .gravadas', function() {
+                calculateTotals();
+            });
+
+            // Función para eliminar la fila
+            $(document).on('click', '.removeRowBtn', function() {
                 $(this).closest('tr').remove();
-                updateTotals();
+                calculateTotals();
+            });
+
+            // Función para guardar los datos de la tabla
+            $('#saveDataBtn').click(function() {
+                let rows = [];
+
+                $('#libroComprasTable tbody tr').each(function() {
+                    let row = {};
+                    row['num'] = $(this).find('td').eq(0).text();
+                    row['emision'] = $(this).find('input').eq(0).val();
+                    row['numero_documento'] = $(this).find('input').eq(1).val();
+                    row['nit_dui'] = $(this).find('input').eq(2).val();
+                    row['nrc'] = $(this).find('input').eq(3).val();
+                    row['nombre_proveedor'] = $(this).find('input').eq(4).val();
+                    row['compras_exentas'] = $(this).find('.exentas').val();
+                    row['compras_gravadas'] = $(this).find('.gravadas').val();
+                    row['credito_fiscal'] = $(this).find('.credito-fiscal').val();
+                    row['iva_percibido'] = $(this).find('.iva-percibido').val();
+                    row['total_compras'] = $(this).find('.total-compras').val();
+                    row['compras_sujetos_excluidos'] = $(this).find('input').eq(10).val();
+                    rows.push(row);
+                });
+
+                $.ajax({
+                    url: '../../controllers/CCompras.php',
+                    method: 'POST',
+                    data: { rows: rows },
+                    success: function(response) {
+                        alert('Datos guardados con éxito: ' + response);
+
+                        // Limpiar la vista de datos agregados
+                        $('#vistaDatosAgregados tbody').empty();
+                    },
+                    error: function() {
+                        alert('Error al guardar los datos.');
+                    }
+                });
             });
         });
     </script>
+
+<?php include '../layouts/footer.php'?>
 </body>
 </html>

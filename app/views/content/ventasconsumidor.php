@@ -19,10 +19,10 @@
     </style>
 </head>
 <body>
-    <?php include '../layouts/header.php' ?>
+    <?php include '../layouts/Header.php' ?>
     <div class="container">
         <h1 class="mt-4">Registro de Venta a Consumidor Final</h1>
-        
+
         <!-- Mensaje de confirmación -->
         <?php if (!empty($mensaje)): ?>
             <div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
@@ -32,9 +32,40 @@
         <?php endif; ?>
 
         <!-- Formulario -->
-        <form id="formulario" method="POST" action="ventasconsumidor.php" onsubmit="return agregarDatosATabla()">
+        <form id="formulario" method="POST" action="CCFinal.php">
             <!-- Campos del formulario -->
-            <!-- ... Tu código HTML de entrada aquí ... -->
+            <div class="mb-3">
+                <label for="fecha" class="form-label">Fecha</label>
+                <input type="date" id="fecha" name="fecha" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="documento_inicio" class="form-label">Documento Inicio</label>
+                <input type="text" id="documento_inicio" name="documento_inicio" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="documento_final" class="form-label">Documento Final</label>
+                <input type="text" id="documento_final" name="documento_final" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="nro_caja" class="form-label">Nº Caja</label>
+                <input type="number" id="nro_caja" name="nro_caja" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="ventas_exentas" class="form-label">Ventas Exentas</label>
+                <input type="number" id="ventas_exentas" name="ventas_exentas" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="ventas_gravadas" class="form-label">Ventas Gravadas</label>
+                <input type="number" id="ventas_gravadas" name="ventas_gravadas" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="exportaciones" class="form-label">Exportaciones</label>
+                <input type="number" id="exportaciones" name="exportaciones" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="venta_cuenta_terceros" class="form-label">Ventas a Cuentas de Terceros</label>
+                <input type="number" id="venta_cuenta_terceros" name="venta_cuenta_terceros" class="form-control" required>
+            </div>
 
             <h2 class="mt-4">Detalles de Ventas</h2>
             <table class="table">
@@ -69,25 +100,6 @@
                 </tfoot>
             </table>
 
-            <!-- Mini tabla de Venta Neta y Débito Fiscal -->
-            <h3 class="mt-4">Resumen Fiscal</h3>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Venta Neta</th>
-                        <th>Débito Fiscal</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td id="venta_neta">0.00</td>
-                        <td id="debito_fiscal">0.00</td>
-                        <td id="total_fiscal">0.00</td>
-                    </tr>
-                </tbody>
-            </table>
-
             <button type="button" class="btn btn-secondary mt-3" onclick="agregarFila()">Agregar Fila</button>
             <button type="submit" class="btn btn-primary mt-3">Guardar</button>
         </form>
@@ -97,33 +109,6 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    let filaEditada = null;
-
-    function calcularTotales() {
-        let totalVentasExentas = 0, totalVentasGravadas = 0, totalExportaciones = 0, totalVentasDiarias = 0;
-
-        document.querySelectorAll('#tabla_ventas tr').forEach(row => {
-            totalVentasExentas += parseFloat(row.cells[5].innerText) || 0;
-            totalVentasGravadas += parseFloat(row.cells[6].innerText) || 0;
-            totalExportaciones += parseFloat(row.cells[7].innerText) || 0;
-            totalVentasDiarias += parseFloat(row.cells[8].innerText) || 0;
-        });
-
-        document.getElementById('total_ventas_exentas').innerText = totalVentasExentas.toFixed(2);
-        document.getElementById('total_ventas_gravadas').innerText = totalVentasGravadas.toFixed(2);
-        document.getElementById('total_exportaciones').innerText = totalExportaciones.toFixed(2);
-        document.getElementById('total_ventas_diarias').innerText = totalVentasDiarias.toFixed(2);
-
-        // Calcula Venta Neta y Débito Fiscal
-        const ventaNeta = totalVentasDiarias / 1.13;
-        const debitoFiscal = totalVentasDiarias * 0.13;
-        const totalFiscal = ventaNeta + debitoFiscal;
-
-        document.getElementById('venta_neta').innerText = ventaNeta.toFixed(2);
-        document.getElementById('debito_fiscal').innerText = debitoFiscal.toFixed(2);
-        document.getElementById('total_fiscal').innerText = totalFiscal.toFixed(2);
-    }
-
     function agregarFila() {
         const tabla = document.getElementById('tabla_ventas');
         const fila = document.createElement('tr');
@@ -136,41 +121,40 @@
         const ventasExentas = document.getElementById('ventas_exentas').value;
         const ventasGravadas = document.getElementById('ventas_gravadas').value;
         const exportaciones = document.getElementById('exportaciones').value;
-        const totalVentasDiarias = ventasGravadas;
+        const totalVentasDiarias = parseFloat(ventasGravadas) || 0;  // Suponiendo que totalVentasDiarias es igual a ventas gravadas
         const ventaCuentaTerceros = document.getElementById('venta_cuenta_terceros').value;
 
+        // Crea las celdas de la fila
         fila.innerHTML = `
-            <td>${tabla.rows.length + 1}</td>
-            <td>${fecha}</td>
-            <td>${documentoInicio}</td>
-            <td>${documentoFinal}</td>
-            <td>${nroCaja}</td>
-            <td>${ventasExentas}</td>
-            <td>${ventasGravadas}</td>
-            <td>${exportaciones}</td>
-            <td>${totalVentasDiarias}</td>
-            <td>${ventaCuentaTerceros}</td>
-            <td>
-                <button type="button" class="btn btn-warning" onclick="editarFila(this)">Editar</button>
-                <button type="button" class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button>
-            </td>
-        `;
+    <td>${tabla.children.length + 1}</td>
+    <td>${fecha}</td>
+    <td>${documentoInicio}</td>
+    <td>${documentoFinal}</td>
+    <td>${nroCaja}</td>
+    <td><input type="hidden" name="ventas[${tabla.children.length}][ventas_exentas]" value="${parseFloat(ventasExentas).toFixed(2)}">${parseFloat(ventasExentas).toFixed(2)}</td>
+    <td><input type="hidden" name="ventas[${tabla.children.length}][ventas_gravadas]" value="${parseFloat(ventasGravadas).toFixed(2)}">${parseFloat(ventasGravadas).toFixed(2)}</td>
+    <td><input type="hidden" name="ventas[${tabla.children.length}][exportaciones]" value="${parseFloat(exportaciones).toFixed(2)}">${parseFloat(exportaciones).toFixed(2)}</td>
+    <td>${totalVentasDiarias.toFixed(2)}</td>
+    <td><input type="hidden" name="ventas[${tabla.children.length}][venta_cuenta_terceros]" value="${parseFloat(ventaCuentaTerceros).toFixed(2)}">${parseFloat(ventaCuentaTerceros).toFixed(2)}</td>
+    <td><button class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
+`;
 
-        if (filaEditada) {
-            filaEditada.replaceWith(fila);
-            filaEditada = null;
-        } else {
-            tabla.appendChild(fila);
-        }
-
-        calcularTotales();
-        limpiarFormulario();
+        tabla.appendChild(fila);
+        
+        // Limpiar campos
+        document.getElementById('fecha').value = '';
+        document.getElementById('documento_inicio').value = '';
+        document.getElementById('documento_final').value = '';
+        document.getElementById('nro_caja').value = '';
+        document.getElementById('ventas_exentas').value = '';
+        document.getElementById('ventas_gravadas').value = '';
+        document.getElementById('exportaciones').value = '';
+        document.getElementById('venta_cuenta_terceros').value = '';
     }
 
     function eliminarFila(boton) {
-        const fila = boton.parentNode.parentNode;
-        fila.parentNode.removeChild(fila);
-        calcularTotales();
+        const fila = boton.parentElement.parentElement;
+        fila.remove();
     }
     </script>
 </body>

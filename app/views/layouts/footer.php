@@ -11,16 +11,16 @@
                 <h5>Contacto</h5>
                 <div class="social-links d-flex justify-content-center">
                     <a href="https://www.facebook.com" class="text-muted mx-2" title="Facebook">
-                        <img src="icons/facebook.png" alt="Facebook" width="24" height="24">
+                        <img src="../layouts/icons/facebook.png" alt="Facebook" width="24" height="24">
                     </a>
                     <a href="https://www.instagram.com" class="text-muted mx-2" title="Instagram">
-                        <img src="icons/instagram.png" alt="Instagram" width="24" height="24">
+                        <img src="../layouts/icons/instagram.png" alt="Instagram" width="24" height="24">
                     </a>
                     <a href="https://wa.me/1234567890" class="text-muted mx-2" title="WhatsApp">
-                        <img src="icons/whatsapp.png" alt="WhatsApp" width="24" height="24">
+                        <img src="../layouts/icons/whatsapp.png" alt="WhatsApp" width="24" height="24">
                     </a>
                     <a href="mailto:nextgensystem345@gmail.com" class="text-muted mx-2" title="Email">
-                        <img src="icons/correo.png" alt="Email" width="24" height="24">
+                        <img src="../layouts/icons/correo.png" alt="Email" width="24" height="24">
                     </a>
                 </div>
             </div>
@@ -40,6 +40,7 @@
         transform: scale(1.1);
     }
     .footer h5 {
-        margin-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
     }
+    
 </style>

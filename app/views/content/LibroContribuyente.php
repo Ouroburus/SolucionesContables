@@ -1,7 +1,6 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Aquí puedes llamar a la función que está en procesar_libro.php para procesar los datos
-    require_once('../../controllers/procesar_libro.php');
+    require_once('../../controllers/CContribuyente.php');
     procesar_libro($_POST);
 }
 ?>
@@ -42,12 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-<?php include '../layouts/header.php'?>
+<?php include '../layouts/Header.php' ?>
 <div class="container-fluid">
     <h1 class="mt-5">LIBRO DE VENTAS A CONTRIBUYENTES</h1>
 
     <div class="contenido">
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" id="libroVentasForm">
             <table class="table table-bordered">
                 <tr>
                     <td>Nombre del Contribuyente:</td>
@@ -78,7 +77,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <th>Débito Fiscal</th>
                             <th>A Cuenta de Terceros Exentas</th>
                             <th>A Cuenta de Terceros Gravadas</th>
-                            <th>Débito Fiscal</th>
                             <th>Total</th>
                             <th>IVA Retenido</th>
                             <th>Acciones</th>
@@ -87,6 +85,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <tbody id="tabla_ventas">
                         <!-- Filas dinámicas -->
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="5">Totales</th>
+                            <th><input type="number" id="total_exentas" class="form-control" value="0" readonly></th>
+                            <th><input type="number" id="total_gravadas" class="form-control" value="0" readonly></th>
+                            <th><input type="number" id="total_debito_fiscal" class="form-control" value="0" readonly></th>
+                            <th><input type="number" id="total_terceros_exentas" class="form-control" value="0" readonly></th>
+                            <th><input type="number" id="total_terceros_gravadas" class="form-control" value="0" readonly></th>
+                            <th><input type="number" id="total_general" class="form-control" value="0" readonly></th>
+                            <th><input type="number" id="total_iva_retenido" class="form-control" value="0" readonly></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
 
@@ -96,27 +107,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
 </div>
-<?php include '../layouts/footer.php'?>
+
 <script>
 function agregarFila() {
     const tabla = document.getElementById('tabla_ventas');
     const fila = document.createElement('tr');
     fila.innerHTML = `
-        <td>${tabla.rows.length}</td>
+        <td>${tabla.rows.length + 1}</td>
         <td><input type="text" class="form-control" name="dia[]" required></td>
         <td><input type="text" class="form-control" name="correlativo[]" required></td>
         <td><input type="text" class="form-control" name="nombre_cliente[]" required></td>
         <td><input type="text" class="form-control" name="nrc_cliente[]"></td>
-        <td><input type="number" class="form-control sumable propias_exentas" name="propias_exentas[]" step="0.01" onchange="actualizarTotales()"></td>
-        <td><input type="number" class="form-control sumable propias_gravadas" name="propias_gravadas[]" step="0.01" onchange="actualizarTotales()"></td>
+        <td><input type="number" class="form-control sumable" name="propias_exentas[]" step="0.01" onchange="actualizarTotales()"></td>
+        <td><input type="number" class="form-control sumable" name="propias_gravadas[]" step="0.01" onchange="actualizarTotales()"></td>
         <td><input type="number" class="form-control" name="debito_fiscal[]" step="0.01" readonly></td>
-        <td><input type="number" class="form-control sumable terceros_exentas" name="terceros_exentas[]" step="0.01" onchange="actualizarTotales()"></td>
-        <td><input type="number" class="form-control sumable terceros_gravadas" name="terceros_gravadas[]" step="0.01" onchange="actualizarTotales()"></td>
+        <td><input type="number" class="form-control sumable" name="terceros_exentas[]" step="0.01" onchange="actualizarTotales()"></td>
+        <td><input type="number" class="form-control sumable" name="terceros_gravadas[]" step="0.01" onchange="actualizarTotales()"></td>
         <td><input type="number" class="form-control" name="total[]" step="0.01" readonly></td>
-        <td><input type="number" class="form-control sumable iva_retenido" name="iva_retenido[]" step="0.01" onchange="actualizarTotales()"></td>
+        <td><input type="number" class="form-control sumable" name="iva_retenido[]" step="0.01" onchange="actualizarTotales()"></td>
         <td><button type="button" class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
     `;
-    tabla.insertBefore(fila, document.getElementById('fila_totales')); // Inserta antes de la fila de totales
+    tabla.appendChild(fila);
     actualizarTotales();
 }
 
@@ -127,94 +138,48 @@ function eliminarFila(boton) {
 }
 
 function actualizarTotales() {
-    // Inicializa los totales en 0
-    let totalPropiasExentas = 0;
-    let totalPropiasGravadas = 0;
+    let totalExentas = 0;
+    let totalGravadas = 0;
     let totalDebitoFiscal = 0;
     let totalTercerosExentas = 0;
     let totalTercerosGravadas = 0;
     let totalGeneral = 0;
     let totalIvaRetenido = 0;
 
-    // Suma los valores de cada columna sumable
-    document.querySelectorAll('.propias_exentas').forEach(input => totalPropiasExentas += parseFloat(input.value) || 0);
-    document.querySelectorAll('.propias_gravadas').forEach(input => totalPropiasGravadas += parseFloat(input.value) || 0);
-    document.querySelectorAll('.terceros_exentas').forEach(input => totalTercerosExentas += parseFloat(input.value) || 0);
-    document.querySelectorAll('.terceros_gravadas').forEach(input => totalTercerosGravadas += parseFloat(input.value) || 0);
-    document.querySelectorAll('.iva_retenido').forEach(input => totalIvaRetenido += parseFloat(input.value) || 0);
-
-    // Calcula Débito Fiscal y Total para cada fila
     const filas = document.querySelectorAll('#tabla_ventas tr');
-    filas.forEach((fila, index) => {
-        if (index < filas.length - 1) { // Evita la fila de totales
-            const propiasGravadas = parseFloat(fila.querySelector('.propias_gravadas').value) || 0;
-            const debitoFiscalInput = fila.querySelector('input[name="debito_fiscal[]"]');
-            const totalInput = fila.querySelector('input[name="total[]"]');
-            
-            // Calcula Débito Fiscal y Total
-            const debitoFiscal = propiasGravadas * 0.13;
-            const totalFila = propiasGravadas + debitoFiscal;
-            
-            // Asigna los valores calculados a los inputs correspondientes
-            debitoFiscalInput.value = debitoFiscal.toFixed(2);
-            totalInput.value = totalFila.toFixed(2);
+    filas.forEach(fila => {
+        const propiasExentas = parseFloat(fila.querySelector('input[name="propias_exentas[]"]').value) || 0;
+        const propiasGravadas = parseFloat(fila.querySelector('input[name="propias_gravadas[]"]').value) || 0;
+        const tercerosExentas = parseFloat(fila.querySelector('input[name="terceros_exentas[]"]').value) || 0;
+        const tercerosGravadas = parseFloat(fila.querySelector('input[name="terceros_gravadas[]"]').value) || 0;
+        const ivaRetenido = parseFloat(fila.querySelector('input[name="iva_retenido[]"]').value) || 0;
 
-            // Suma al total general de Débito Fiscal y Total
-            totalDebitoFiscal += debitoFiscal;
-            totalGeneral += totalFila;
-        }
+        const debitoFiscal = propiasGravadas * 0.13; // Suponiendo un IVA del 13%
+        const total = propiasExentas + propiasGravadas + tercerosExentas + tercerosGravadas;
+
+        fila.querySelector('input[name="debito_fiscal[]"]').value = debitoFiscal.toFixed(2);
+        fila.querySelector('input[name="total[]"]').value = total.toFixed(2);
+
+        totalExentas += propiasExentas;
+        totalGravadas += propiasGravadas;
+        totalDebitoFiscal += debitoFiscal;
+        totalTercerosExentas += tercerosExentas;
+        totalTercerosGravadas += tercerosGravadas;
+        totalGeneral += total;
+        totalIvaRetenido += ivaRetenido;
     });
 
-    // Actualiza los totales en la fila de totales
-    document.getElementById('totalPropiasExentas').textContent = totalPropiasExentas.toFixed(2);
-    document.getElementById('totalPropiasGravadas').textContent = totalPropiasGravadas.toFixed(2);
-    document.getElementById('totalDebitoFiscal').textContent = totalDebitoFiscal.toFixed(2);
-    document.getElementById('totalTercerosExentas').textContent = totalTercerosExentas.toFixed(2);
-    document.getElementById('totalTercerosGravadas').textContent = totalTercerosGravadas.toFixed(2);
-    document.getElementById('totalGeneral').textContent = totalGeneral.toFixed(2);
-    document.getElementById('totalIvaRetenido').textContent = totalIvaRetenido.toFixed(2);
+    // Actualizar totales en la fila de totales
+    document.getElementById('total_exentas').value = totalExentas.toFixed(2);
+    document.getElementById('total_gravadas').value = totalGravadas.toFixed(2);
+    document.getElementById('total_debito_fiscal').value = totalDebitoFiscal.toFixed(2);
+    document.getElementById('total_terceros_exentas').value = totalTercerosExentas.toFixed(2);
+    document.getElementById('total_terceros_gravadas').value = totalTercerosGravadas.toFixed(2);
+    document.getElementById('total_general').value = totalGeneral.toFixed(2);
+    document.getElementById('total_iva_retenido').value = totalIvaRetenido.toFixed(2);
 }
 </script>
 
-<div class="table-wrapper">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>N°</th>
-                <th>Día</th>
-                <th>N° Correlativo</th>
-                <th>Nombre del Cliente</th>
-                <th>NRC</th>
-                <th>Propias Exentas</th>
-                <th>Propias Gravadas</th>
-                <th>Débito Fiscal</th>
-                <th>A Cuenta de Terceros Exentas</th>
-                <th>A Cuenta de Terceros Gravadas</th>
-                <th>Total</th>
-                <th>IVA Retenido</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="tabla_ventas">
-            <!-- Filas dinámicas -->
-        </tbody>
-        <tfoot>
-            <tr id="fila_totales">
-                <th colspan="5">Totales</th>
-                <td id="totalPropiasExentas">0.00</td>
-                <td id="totalPropiasGravadas">0.00</td>
-                <td id="totalDebitoFiscal">0.00</td>
-                <td id="totalTercerosExentas">0.00</td>
-                <td id="totalTercerosGravadas">0.00</td>
-                <td id="totalGeneral">0.00</td>
-                <td id="totalIvaRetenido">0.00</td>
-                <td></td>
-            </tr>
-        </tfoot>
-    </table>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
+<?php include '../layouts/footer.php'?>
 </body>
 </html>
